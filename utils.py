@@ -3,6 +3,7 @@
 import numpy as np
 import paddle
 from paddle_quantum.ansatz import Circuit
+import tensorcircuit as tc
 
 
 def haar_unitary(dim : int) -> paddle.Tensor:
@@ -120,3 +121,58 @@ def M_direction_generator(old_param, M):
     new_param = paddle.to_tensor(np.random.uniform(low=0, high=2*np.pi, size=(M,))) 
 
     return new_param
+
+
+def tensorcircuit_Alternating_Layer_ansatz(num_qubits, cir_depth, params):
+    r"""Generate alternating layer ansatz using tensorcircuit.
+
+    Args:
+        num_qubits (int): Number of qubits.
+        depth (int, optional): Depth. Defaults to 1.
+
+    Returns:
+        Circuit: ALT ansatz.
+    """
+    
+    c = tc.Circuit(num_qubits)
+    
+    for idx_qubit in range(num_qubits):
+        c.ry(idx_qubit, theta=params[idx_qubit])
+        c.rz(idx_qubit, theta=params[idx_qubit + num_qubits])
+    
+    if num_qubits == 1:
+        for idx_layer in range(cir_depth):
+            c.ry(0, theta=params[2 * num_qubits + 2 * num_qubits * idx_layer + idx_qubit])
+            c.rz(0, theta=params[2 * num_qubits + 2 * num_qubits * idx_layer + idx_qubit + num_qubits])
+    elif (num_qubits % 2 == 0) and (num_qubits != 1):
+        for idx_layer in range(cir_depth):
+            for idx_qubit in range(0, num_qubits - 1, 2):
+                c.cz(idx_qubit, idx_qubit + 1)
+            for idx_qubit in range(num_qubits):
+                c.ry(idx_qubit, theta=params[2 * num_qubits + 2 * num_qubits * idx_layer + idx_qubit])
+            for idx_qubit in range(num_qubits):
+                c.rz(idx_qubit, theta=params[2 * num_qubits + 2 * num_qubits * idx_layer + idx_qubit + num_qubits])
+            
+            for idx_qubit in range(1, num_qubits - 2, 2):
+                c.cz(idx_qubit, idx_qubit + 1)
+            for idx_qubit in range(1, num_qubits - 1):
+                c.ry(idx_qubit, theta=params[2* num_qubits + 2 * num_qubits * idx_layer + idx_qubit])
+            for idx_qubit in range(1, num_qubits - 1):
+                c.rz(idx_qubit, theta=params[2* num_qubits + 2 * num_qubits * idx_layer + idx_qubit + num_qubits])
+    else:
+        for idx_layer in range(cir_depth):
+            for idx_qubit in range(0, num_qubits - 1, 2):
+                c.cz(idx_qubit, idx_qubit + 1)
+            for idx_qubit in range(num_qubits-1):
+                c.ry(idx_qubit, theta=params[2 * num_qubits + 2 * num_qubits * idx_layer + idx_qubit])
+            for idx_qubit in range(num_qubits-1):
+                c.rz(idx_qubit, theta=params[2 * num_qubits + 2 * num_qubits * idx_layer + idx_qubit + num_qubits])
+            
+            for idx_qubit in range(1, num_qubits, 2):
+                c.cz(idx_qubit, idx_qubit + 1)
+            for idx_qubit in range(1, num_qubits):
+                c.ry(idx_qubit, theta=params[2 * num_qubits + 2 * num_qubits * idx_layer + idx_qubit])
+            for idx_qubit in range(1, num_qubits):
+                c.rz(idx_qubit, theta=params[2 * num_qubits + 2 * num_qubits * idx_layer + idx_qubit + num_qubits])
+        
+    return c
