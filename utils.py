@@ -76,11 +76,19 @@ def Alternating_Layer_ansatz(num_qubits: int, depth=1) -> Circuit:
                 cir.cz([qubit_idx, qubit_idx + 1])
         cir.ry()
         cir.rz()
-        for qubit_idx in range(num_qubits):
-            if qubit_idx % 2 == 1 and (qubit_idx + 1) < num_qubits:
-                cir.cz([qubit_idx, qubit_idx + 1])                
-        cir.ry(range(1, num_qubits - 1))
-        cir.rz(range(1, num_qubits - 1))
+        
+        if num_qubits > 2:
+            for qubit_idx in range(num_qubits):
+                if qubit_idx % 2 == 1 and (qubit_idx + 1) < num_qubits:
+                    cir.cz([qubit_idx, qubit_idx + 1])                
+            cir.ry(range(1, num_qubits - 1))
+            cir.rz(range(1, num_qubits - 1))
+        else:
+            for qubit_idx in range(num_qubits):
+                if qubit_idx % 2 == 0:
+                    cir.cz([qubit_idx, qubit_idx + 1])
+            cir.ry()
+            cir.rz()
     return cir
 
 

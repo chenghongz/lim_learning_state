@@ -44,7 +44,7 @@ if __name__ == "__main__":
     np.random.seed(0)
 
     # some variables
-    num_sample_states = 2  # the number of initial state to be sampled
+    num_sample_states = 200  # the number of initial state to be sampled
     list_num_qubits = list(range(1, 12))  # list of qubits to be verified
     cir_depth = 5  # the depth of the circuit
     num_params_differentiated = 1 # the number parameters to be considered

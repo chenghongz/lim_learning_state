@@ -1,6 +1,6 @@
 # Statistical Analysis of Quantum State Learning Process in Quantum Neural Networks
 
-This GitHub repository contains a demonstration for the main theorem verification and practical variational state learning examples. Please refer to [our paper](to be added) for further information.
+This GitHub repository contains a demonstration for the main theorem verification and practical variational state learning examples. Please refer to our paper on Section.4 for further information.
 
 ## Install Paddle Quantum and Tensorcircuit
 
@@ -13,10 +13,10 @@ pip install tensorcircuit==0.8.0
 
 ## File Description
 
-`training_landscapes` demonstrates local minima by sampling from p-overlap states as well as different optimization directions.
+`training_landscapes` demonstrates the training landscape profiles in Fig.3 by sampling from p-overlap states as well as different optimization directions.
 
-`pr_local_minima` provides the code for directly verifying Theorem 2 in terms of the number of qubits, the number of trainable parameters, and overlap information.
+`pr_local_minima` provides the code for directly verifying the exponentially likely local minima proposed by Theorem 2 in Fig. 4 in terms of the number of qubits, the number of trainable parameters, and overlap information.
 
-`state_learning` provides the code for the varational training of quantum neural networks on the arbitrary states beginning with initial p-overlap states.
+`state_learning` provides the code for the varational training of quantum neural networks on the state learning task shown in Fig. 1(c) beginning with initial 0.8-overlap states.
 
 `utils.py` includes helper functions.

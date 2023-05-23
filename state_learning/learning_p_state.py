@@ -41,24 +41,27 @@ if __name__ == "__main__":
     
     np.random.seed(0)
 
-    depth = 3 # Circuit depth
-    sample = 3 # Number of sampled random states
-    overlap = 0.2 # Initial overlap
-    N = 4 # Number of Qubits
+    depth = 5       # Circuit depth
+    sample = 10     # Number of sampled random states
+    overlap = 0.2   # Initial overlap
+    N = 4         # Number of Qubits
     
     gradient = []
     variance = []
 
     input_cir, input_state, input_param, input_u, init_theta = u_theta(N, depth)
+    input_cir_param = input_cir.param
 
     for i in (range(sample)):
-
+        
+        input_cir.update_param(input_cir_param)
+        
         # sample target state
         target_state = random_state_fixed_overlap(unitary=input_u.numpy(), overlap=overlap)
-        print(f"initial : ", paddle.abs(State(target_state).bra @ input_state.ket))
+        print(f"initial : ",paddle.abs(State(target_state).bra @ input_state.ket))
 
         # calculate loss
         output_state, loss_list = state_learning(input_cir, N, target_state)
 
-        print(f"final : ", paddle.abs(State(target_state).bra @ output_state.ket))
-        np.save("test_loss_list", loss_list)
+        print(f"final : ",paddle.abs(State(target_state).bra @ output_state.ket))
+        np.save(f"./data2/test_loss_list_qubit{N}_depth{depth}_sample{i}", loss_list)
