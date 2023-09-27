@@ -17,6 +17,6 @@ pip install tensorcircuit==0.8.0
 
 `pr_local_minima` provides the code for directly verifying the exponentially likely local minima proposed by Theorem 2 in Fig. 4 in terms of the number of qubits, the number of trainable parameters, and overlap information.
 
-`state_learning` provides the code for the varational training of quantum neural networks on the state learning task shown in Fig. 1(c) beginning with initial 0.8-overlap states.
+`state_learning` provides the code for the variational training of quantum neural networks on the state learning task shown in Fig. 1(c) beginning with initial 0.8-overlap states.
 
 `utils.py` includes helper functions.
